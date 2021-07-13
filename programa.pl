@@ -1,61 +1,37 @@
-cjto(x,[uno,cero]).
+conjunto(x,[1,0]).
 
-esMiembro(Elemento,Conjunto):-
-    cjto(Conjunto,Set),
-    member(Elemento,Set).
+esFuncion(X,Funcion):-
+    conjunto(X,Elementos),
+    length(Elementos,Len),
+    LenCompatible is Len^2,
+    length(Funcion,LenCompatible),
+    todosPosiblesElementos(Funcion,Elementos),
+    not(hayRepes(Funcion)).   
 
-operacion(f,uno,uno,cero).
-operacion(f,uno,cero,uno).
-operacion(f,cero,cero,cero).
-operacion(f,cero,uno,uno).
+esGrupo(X,Funcion):-
+    
 
-esGrupo(Conjunto,Operacion):-
-    operacionCerrada(Conjunto,Operacion),
-    hayIdentidad(Conjunto,Operacion),
-    asocia(Conjunto,Operacion),
-    hayInversos(Conjunto,Operacion).
+noRepiteElementos([X|Demas]):-
+    not(member(X,Demas)),
+    noRepiteElementos(Demas).
 
-operacionCerrada(Conjunto,Operacion):-
-not(noCierra(Conjunto,Operacion)).
+noRepiteElementos([]).
 
-noCierra(Conjunto,Operacion):-
-    esMiembro(Elemento,Conjunto),
-    esMiembro(OtroElemento,Conjunto),
-    operacion(Operacion,Elemento,OtroElemento,Resultado),
-    not(esMiembro(Resultado,Conjunto)).
-
-hayIdentidad(Conjunto,Operacion):-
-    esMiembro(Identidad,Conjunto),
-    esIdentidad(Identidad,Conjunto,Operacion).
-
-esIdentidad(Identidad,Conjunto,Operacion):-
-    esMiembro(Identidad,Conjunto),
-    forall(esMiembro(Elemento,Conjunto),operacion(Operacion,Identidad,Elemento,Elemento)),
-    forall(esMiembro(Elemento,Conjunto),operacion(Operacion,Elemento,Identidad,Elemento)).
-
-asocia(Conjunto,Operacion):-
-    not(noAsocia(Conjunto,Operacion)).
-
-noAsocia(Conjunto,Operacion):-
-    esMiembro(X,Conjunto),
-    esMiembro(Y,Conjunto),
-    esMiembro(Z,Conjunto),
-    operacion(Operacion,X,Y,ResultadoXY),
-    operacion(Operacion,ResultadoXY,Z,ResultadoXYyZ),
-    operacion(Operacion,Y,Z,ResultadoYZ),
-    operacion(Operacion,X,ResultadoYZ,ResultadoXyYZ),
-    ResultadoXYyZ \= ResultadoXyYZ.
-
-hayInversos(Conjunto,Operacion):-
-    forall(esMiembro(X,Conjunto),tieneInverso(X,Operacion,Conjunto)).
-
-tieneInverso(X,Operacion,Conjunto):-
-    esMiembro(Inverso,Conjunto),
-    esIdentidad(Identidad,Conjunto,Operacion),
-    operacion(Operacion,X,Inverso,Identidad),
-    operacion(Operacion,Inverso,X,Identidad).
+hayRepes(Funcion):-
+    member((X,Y,Z),Funcion),
+    member((X,Y,T),Funcion),
+    Z \= T.
 
 
+todosPosiblesElementos([X|Demas],Conjunto):-
+    esPosibleElemento(Conjunto,X),
+    todosPosiblesElementos(Demas,Conjunto),
+    not(member(X,Demas)).
+
+todosPosiblesElementos([],_).
 
 
-
+esPosibleElemento(Cjto,(A,B,C)):-
+    member(A,Cjto),
+    member(B,Cjto),
+    member(C,Cjto).
