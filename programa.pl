@@ -9,6 +9,32 @@ esFuncion(X,Funcion):-
     not(hayRepes(Funcion)).   
 
 esGrupo(X,Funcion):-
+    esFuncion(X,Funcion),
+    not(noAsocia(Funcion)),
+    hayidentidad(Funcion),
+    inversos(Funcion,X).
+
+operacion(Funcion,X,Y,Z):-
+    esFuncion(_,Funcion).
+    member((X,Y,Z),Funcion).
+
+inversos(Funcion,X):-
+    conjunto(X,Cjto),
+    forall(member(T,Cjto),inverso(Funcion,T,_)).
+
+inverso(Funcion,T,X):-
+    identidad(E,Funcion),
+    operacion(Funcion,T,X,E),
+    operacion(Funcion,X,T,E).
+
+hayIdentidad(Funcion):-
+    identidad(Elem,Funcion).
+
+identidad(Elem,Funcion):-
+    forall(member((Z,Elem,Resultado),Funcion),Resultado==Z),
+    forall(member((Elem,_,Resultado),Funcion),Resultado == Z).
+
+
     
 
 noRepiteElementos([X|Demas]):-

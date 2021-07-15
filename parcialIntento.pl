@@ -57,8 +57,7 @@ estaVivo(fuego).
 estaVivo(agua).
 estaVivo(Elemento):-
     haceFaltaPara(Elemento,Cjto),
-    member(X,Cjto),
-    estaVivo(X).
+    forall(member(X,Cjto),estaVivo(X)).
 
 puedeConstruir(Jugador,Elemento):-
     tieneIngredientesPara(Jugador,Elemento),
