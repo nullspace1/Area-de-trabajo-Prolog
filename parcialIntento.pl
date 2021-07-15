@@ -75,7 +75,7 @@ messirve(libro(inerte),Elemento):-
 messirve(cuchara(_),Elemento):-
     esElemental(Elemento).
 
-messirve(cuchara(Long),Elemento):-
+messirve(cuchara(Long),Elemento):- %% Logica repetida, cuida2
     haceFaltaPara(Elemento,CosasQueFaltan),
     Capacidad is Long/10, 
    length(CosasQueFaltan,Longitud),
